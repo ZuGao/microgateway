@@ -1,0 +1,44 @@
+Work in progress.
+
+The airlock microgateway has been installed.
+
+* Network configuration:{{ if and .Values.route.enabled .Values.ingress.enabled }}
+    Route
+      Hosts: {{ .Values.route.hosts }}
+      Path: {{ .Values.route.path }}
+    Ingress
+      Hosts: {{ .Values.ingress.hosts }}
+      Path: {{ .Values.ingress.path }}
+      TargetPath: {{ .Values.ingress.rewritetarget }}
+{{- else if .Values.route.enabled }}
+    Route
+      Hosts: {{ .Values.route.hosts }}
+      Path: {{ .Values.route.path }}
+{{- else if .Values.ingress.enabled }}
+    Ingress
+      Hosts: {{ .Values.ingress.hosts }}
+      Path: {{ .Values.ingress.path }}
+      TargetPath: {{ .Values.ingress.rewritetarget }}
+{{- else }}
+    ###############################################################################
+    ######       WARNING: `microgateway.network` has not been declared!       #####
+    ###### For the connectivity of the microgateway this setting is required. #####
+    ###############################################################################
+{{- end }}
+
+{{- if .Values.redis.enabled }}
+* Redis configuration:
+    Execute the following commands and check that the output of the two variables is identical.
+
+```
+export REDIS_MASTER_POD=$(kubectl get pods | grep master |  cut -d ' ' -f 1 | sed 's|\(.*\)-.*|\1|')
+export DSL_REDIS_SERVICE={{ .Values.config.redisService }}
+echo $DSL_REDIS_SERVICE and $DSL_REDIS_SERVICE
+```
+{{- end }}
+
+Interessante Infos nach dem Deployment?
+- How to access the WAF?
+- Ingress/Route Config
+- Redis enabled
+- ...
