@@ -8,7 +8,7 @@ Web Application firewall (WAF) as a container to protect other containers.
 To add the chart repository:
 
 ```console
-helm repo add airlock https://libuweber.github.io/charts
+helm repo add airlock https://libuweber.github.io/microgateway/
 ```
 
 ## Installing the Chart
