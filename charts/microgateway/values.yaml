@@ -26,8 +26,8 @@ config:
         # config.default.mapping.denyRules.logOnly -- Deny rule log only
         logOnly: false
     backend:
-      # config.default.backend.service -- Backend Service Name
-      service: backend-service
+      # config.default.backend.hostname -- Backend Hostname
+      hostname: backend-service
       # config.default.backend.port -- Backend Port
       port: 8080
       # config.default.backend.protocol -- Backend Protocol
