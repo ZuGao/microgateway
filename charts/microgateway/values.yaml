@@ -18,7 +18,7 @@ config:
       entryPath: /
       # config.default.mapping.operationalMode -- Specifies the operational mode of this mapping (`production`, `integration`)
       operationalMode: production
-      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. 
+      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`.
       sessionHandling: ""
       denyRules:
         # config.default.mapping.denyRules.enabled -- If deny rules should be enabled
