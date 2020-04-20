@@ -8,7 +8,7 @@ Web Application firewall (WAF) as a container to protect other containers.
 To add the chart repository:
 
 ```console
-helm repo add airlock https://libuweber.github.io/charts
+helm repo add airlock https://libuweber.github.io/microgateway/
 ```
 
 ## Installing the Chart
@@ -41,9 +41,9 @@ In case that the default config is not sufficient, create a custom config using 
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
 | config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
+| config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
 | config.default.backend.protocol | string | `"http"` | Backend Protocol |
-| config.default.backend.service | string | `"backend-service"` | Backend Service Name |
 | config.default.mapping.denyRules.enabled | bool | `true` | If deny rules should be enabled |
 | config.default.mapping.denyRules.level | string | `"standard"` | Deny rule level (`basic`, `standard`, `strict`) |
 | config.default.mapping.denyRules.logOnly | bool | `false` | Deny rule log only |
