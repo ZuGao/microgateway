@@ -40,7 +40,13 @@ data:
     apps:
     - mappings:
       - entry_path: {{ $config.default.mapping.entryPath }}
+        {{- if $config.default.mapping.sessionHandling }}
         session_handling: {{ $config.default.mapping.sessionHandling }}
+        {{- else if .Values.redis.enabled }}
+        session_handling: {{ "enforce_session" }}
+        {{- else }}
+        session_handling: {{ "ignore_session" }}
+        {{- end }}
         deny_rules:
         - enable: {{ $config.default.mapping.denyRules.enabled }}
           log_only: {{ $config.default.mapping.denyRules.logOnly }}
