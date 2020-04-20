@@ -16,7 +16,9 @@ config:
     mapping:
       # config.default.mapping.entryPath -- The `entry_path` for this app
       entryPath: /
-      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is 'enforce_session', if redis disabled false this value is 'ignore_session'. 
+      # config.default.mapping.operationalMode -- Specifies the operational mode of this mapping (`production`, `integration`)
+      operationalMode: production
+      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. 
       sessionHandling: ""
       denyRules:
         # config.default.mapping.denyRules.enabled -- If deny rules should be enabled
@@ -59,12 +61,10 @@ config:
   logLevel: info
   # config.redisService -- Redis service hostname
   redisService: redis-master
-  useIPFromHeader:
-    # config.useIPFromHeader.enabled -- If the client's IP address should be read from a header set by the load balancer
-    enabled: true
-    # config.useIPFromHeader.header -- Header from which to read the client IP
+  IPHeader:
+    # config.IPHeader.header -- Header from which to read the client IP
     header: X-Forwarded-For
-    # config.useIPFromHeader.trustedProxies -- IP networkds which to trust to set the header (load balancers)
+    # config.IPHeader.trustedProxies -- IP networkds which to trust to set the header (load balancers). Required for the IPHeader configuration.
     trustedProxies: []
 
   # config.apps -- Custom apps definition (YAML array). Overwrites default apps of this chart

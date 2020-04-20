@@ -40,6 +40,8 @@ In case that the default config is not sufficient, create a custom config using 
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
+| config.IPHeader.header | string | `"X-Forwarded-For"` | Header from which to read the client IP |
+| config.IPHeader.trustedProxies | list | `[]` | IP networkds which to trust to set the header (load balancers). Required for the IPHeader configuration. |
 | config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
@@ -48,7 +50,8 @@ In case that the default config is not sufficient, create a custom config using 
 | config.default.mapping.denyRules.level | string | `"standard"` | Deny rule level (`basic`, `standard`, `strict`) |
 | config.default.mapping.denyRules.logOnly | bool | `false` | Deny rule log only |
 | config.default.mapping.entryPath | string | `"/"` | The `entry_path` for this app |
-| config.default.mapping.sessionHandling | string | `"enforce_session"` | Session handling for this app |
+| config.default.mapping.operationalMode | string | `"production"` | Specifies the operational mode of this mapping (`production`, `integration`) |
+| config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`.  |
 | config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all defaults of this chart |
 | config.env | list | `[]` | List of environment variables (YAML array) |
 | config.existingSecret | string | `nil` | An existing secret to be used, must contain the keys `license` and `passphrase` |
@@ -59,9 +62,6 @@ In case that the default config is not sufficient, create a custom config using 
 | config.passphrase | string | `nil` | Encryption passphrase used for the session. A random one is generated on each upgrade if not specified here or in `config.existingSecret` |
 | config.redisService | string | `"redis-master"` | Redis service hostname |
 | config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS key, certificate and CA for the Microgateway. Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used |
-| config.useIPFromHeader.enabled | bool | `true` | If the client's IP address should be read from a header set by the load balancer |
-| config.useIPFromHeader.header | string | `"X-Forwarded-For"` | Header from which to read the client IP |
-| config.useIPFromHeader.trustedProxies | list | `[]` | IP networkds which to trust to set the header (load balancers) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
