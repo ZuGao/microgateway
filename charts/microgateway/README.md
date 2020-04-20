@@ -51,7 +51,7 @@ In case that the default config is not sufficient, create a custom config using 
 | config.default.mapping.denyRules.logOnly | bool | `false` | Deny rule log only |
 | config.default.mapping.entryPath | string | `"/"` | The `entry_path` for this app |
 | config.default.mapping.operationalMode | string | `"production"` | Specifies the operational mode of this mapping (`production`, `integration`) |
-| config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`.  |
+| config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. |
 | config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all defaults of this chart |
 | config.env | list | `[]` | List of environment variables (YAML array) |
 | config.existingSecret | string | `nil` | An existing secret to be used, must contain the keys `license` and `passphrase` |
