@@ -25,15 +25,16 @@ jobs:
       - name: Run helm-docs
         id: validatedocs
         run: .github/helm-docs-verify.sh
-        continue-on-error: true
       - name: Generate Docs on failure
-        if: steps.validatedocs.outputs.status != 'success'
+        if: failure()
         run: .github/helm-docs-generate.sh
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          CR_TOKEN: ${{ secrets.CR_TOKEN }}
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
       - lint-chart
-      - lint-docs
     strategy:
       matrix:
         k8s:
