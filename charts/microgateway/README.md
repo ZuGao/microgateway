@@ -40,8 +40,8 @@ In case that the default config is not sufficient, create a custom config using 
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
-| config.IPHeader.header | string | `"X-Forwarded-For"` | Header from which to extract the client IP |
-| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from header (typically these are IP addresses from load balancers). Required for the IPHeader configuration. |
+| config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured. |
 | config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
@@ -58,7 +58,7 @@ In case that the default config is not sufficient, create a custom config using 
 | config.expert.apache | string | `nil` | Expert settings for Apache (multiline string) |
 | config.expert.security_gate | string | `nil` | Expert settings for security gateway (multiline string) |
 | config.license | string | `nil` | License for the Microgateway (multiline string) |
-| config.logLevel | string | `"info"` | Log level (`INFO`, `TRACE`) |
+| config.logLevel | string | `"info"` | Log level (`info`, `trace`) |
 | config.passphrase | string | `nil` | Encryption passphrase used for the session. A random one is generated on each upgrade if not specified here or in `config.existingSecret` |
 | config.redisService | string | `"redis-master"` | Redis service hostname |
 | config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS key, certificate and CA for the Microgateway. Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used |
