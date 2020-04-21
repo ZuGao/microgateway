@@ -10,10 +10,3 @@ tar -xf /tmp/helm-docs.tar.gz helm-docs
 # validate docs
 ./helm-docs
 git diff --exit-code
-
-if [ $(git diff --exit-code) -ne 0 ]
-then
-  echo "ok"
-fi
-echo "Some Test Echo"
-echo "After the code exited"
