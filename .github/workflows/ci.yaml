@@ -23,7 +23,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Run helm-docs
-        run: .github/helm-docs.sh
+        id: validatedocs
+        run: .github/helm-docs-verify.sh
+        continue-on-error: true
+      - name: Generate Docs on failure
+        if: steps.validatedocs.outputs.status != 'success'
+        run: .github/helm-docs-generate.sh
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:

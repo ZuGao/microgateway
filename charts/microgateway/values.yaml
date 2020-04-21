@@ -4,9 +4,9 @@ replicaCount: 1
 image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
-  # image.repository -- Image tag
+  # image.tag -- Image tag
   tag: 7.4.sprint10_Build008
-  # image.repository -- Pull policy (`Always`, `IfNotPresent`, `Never`)
+  # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
 ## Microgateway Config
@@ -16,8 +16,10 @@ config:
     mapping:
       # config.default.mapping.entryPath -- The `entry_path` for this app
       entryPath: /
-      # config.default.mapping.sessionHandling -- Session handling for this app
-      sessionHandling: enforce_session
+      # config.default.mapping.operationalMode -- Specifies the operational mode of this mapping (`production`, `integration`)
+      operationalMode: production
+      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`.
+      sessionHandling: ""
       denyRules:
         # config.default.mapping.denyRules.enabled -- If deny rules should be enabled
         enabled: true
@@ -55,13 +57,11 @@ config:
   # config.existingSecret -- (string) An existing secret to be used,
   # must contain the keys `license` and `passphrase`
   existingSecret:
-  # config.loglevel -- Log level (`info`, `trace`)
+  # config.logLevel -- Log level (`info`, `trace`)
   logLevel: info
   # config.redisService -- Redis service hostname
   redisService: redis-master
-  useIPFromHeader:
-    # config.useIPFromHeader.enabled -- If the client's IP address should be read from a header set by the load balancer
-    enabled: true
+  IPHeader:
     # config.useIPFromHeader.header -- HTTP header to extract the client IP address.
     header: X-Forwarded-For
     # config.useIPFromHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured.
