@@ -1,23 +1,26 @@
 {{- $route := .Values.route -}}
 {{- $ingress := .Values.ingress -}}
 
-The airlock microgateway is installing.
+The Airlock microgateway has been installed.
 
-* External connectivity:{{ if and $route.enabled $ingress.enabled }}
+{{ if and $route.enabled $ingress.enabled }}
+* External connectivity:
     Route:
       {{- range $route.hosts }}
-        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $ingress.path }}{{ end }}
+        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $route.path }}{{ end }}
       {{- end }}
     Ingress:
       {{- range $ingress.hosts }}
         - http{{ if $ingress.tls }}s{{ end }}://{{ . }}{{ $ingress.path }}
       {{- end }}
 {{- else if $route.enabled }}
+* External connectivity:
     Route
       {{- range $route.hosts }}
-        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $ingress.path }}{{ end }}
+        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $route.path }}{{ end }}
       {{- end }}
 {{- else if $ingress.enabled }}
+* External connectivity:
     Ingress:
       {{- range $ingress.hosts }}
         - http{{ if $ingress.tls }}s{{ end }}://{{ . }}{{ $ingress.path }}
