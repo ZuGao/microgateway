@@ -40,7 +40,7 @@ In case that the default config is not sufficient, create a custom config using 
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
-| config.IPHeader.header | string | `"X-Forwarded-For"` | Header from which to read the client IP |
+| config.IPHeader.header | string | `"X-Forwarded-For"` | Header from which to extract the client IP |
 | config.IPHeader.trustedProxies | list | `[]` | IP networkds which to trust to set the header (load balancers). Required for the IPHeader configuration. |
 | config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
