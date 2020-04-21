@@ -29,8 +29,6 @@ jobs:
       - name: Generate Docs on failure
         if: steps.validatedocs.outputs.status != 'success'
         run: .github/helm-docs-generate.sh
-        env:
-          BASE_BRANCH: ${{ github.base_ref }}
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
