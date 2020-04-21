@@ -58,14 +58,14 @@ In case that the default config is not sufficient, create a custom config using 
 | config.expert.apache | string | `nil` | Expert settings for Apache (multiline string) |
 | config.expert.security_gate | string | `nil` | Expert settings for security gateway (multiline string) |
 | config.license | string | `nil` | License for the Microgateway (multiline string) |
-| config.logLevel | string | `"info"` |  |
+| config.logLevel | string | `"info"` | Log level (`INFO`, `TRACE`) |
 | config.passphrase | string | `nil` | Encryption passphrase used for the session. A random one is generated on each upgrade if not specified here or in `config.existingSecret` |
 | config.redisService | string | `"redis-master"` | Redis service hostname |
 | config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS key, certificate and CA for the Microgateway. Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
-| image.pullPolicy | string | `"Always"` |  |
-| image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.tag | string | `"7.4.sprint10_Build008"` |  |
+| image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
+| image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
+| image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to be used when pulling images |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress |
 | ingress.enabled | bool | `false` | If an ingress should be created |

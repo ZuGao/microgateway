@@ -4,9 +4,9 @@ replicaCount: 1
 image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
-  # image.repository -- Image tag
+  # image.tag -- Image tag
   tag: 7.4.sprint10_Build008
-  # image.repository -- Pull policy (`Always`, `IfNotPresent`, `Never`)
+  # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
 ## Microgateway Config
@@ -57,7 +57,7 @@ config:
   # config.existingSecret -- (string) An existing secret to be used,
   # must contain the keys `license` and `passphrase`
   existingSecret:
-  # config.loglevel -- Log level (`INFO`, `TRACE`)
+  # config.logLevel -- Log level (`INFO`, `TRACE`)
   logLevel: info
   # config.redisService -- Redis service hostname
   redisService: redis-master
