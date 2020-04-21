@@ -27,7 +27,7 @@ jobs:
         run: .github/helm-docs-verify.sh
         continue-on-error: true
       - name: Generate Docs on failure
-        if: steps.validatedocs.outputs.status == 'failure'
+        if: steps.validatedocs.outputs.status != 'success'
         run: .github/helm-docs-generate.sh
   kubeval-chart:
     runs-on: ubuntu-latest
