@@ -62,9 +62,9 @@ config:
   # config.redisService -- Redis service hostname
   redisService: redis-master
   IPHeader:
-    # config.useIPFromHeader.header -- HTTP header to extract the client IP address.
+    # config.IPHeader.header -- HTTP header to extract the client IP address.
     header: X-Forwarded-For
-    # config.useIPFromHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured.
+    # config.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured.
     trustedProxies: []
 
   # config.apps -- Custom apps definition (YAML array). Overwrites default apps of this chart
