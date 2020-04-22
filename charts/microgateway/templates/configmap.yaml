@@ -11,15 +11,21 @@ data:
     license_file: /secret/config/license
     session:
       encryption_passphrase_file: /secret/config/passphrase
-    {{- if .Values.redis.enabled }}
+    {{- if or .Values.redis.enabled $config.redisService }}
+      {{- if $config.redisService }}
       redis_hosts:
-        - {{ $config.redisService }}
+        {{- range $config.redisService }} 
+        - {{ . }}
+        {{- end }}
+      {{- else }}
+      redis_hosts: redis-master
+      {{- end }}
     {{- end }}
     log:
       level: {{ $config.logLevel }}
-  {{- if or $config.expert.apache $config.expert.security_gate $config.IPHeader.trustedProxies $config.default.virtualHost.tlsCipher.enabled $config.default.backend.tls.enabled }}
+  {{- if (include "microgateway.globalExpertSettings" .) }}
     expert_settings:
-    {{- if or $config.expert.apache $config.IPHeader.trustedProxies $config.default.virtualHost.tlsCipher.enabled}}
+    {{- if (include "microgateway.apacheExpertSettings" .) }}
       apache: |
       {{- if $config.IPHeader.trustedProxies }}
         RemoteIPHeader {{ $config.IPHeader.header }}
@@ -37,7 +43,7 @@ data:
         {{- . | nindent 8 }}
       {{- end }}
     {{- end }}
-    {{- if or $config.expert.security_gate $config.default.backend.tls.enabled }}
+    {{- if (include "microgateway.securityGateExpertSettings" .) }}
       security_gate: |
       {{- if $config.default.backend.tls.enabled }}
         {{- if $config.default.backend.tls.serverCa }}

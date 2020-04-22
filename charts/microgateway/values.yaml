@@ -43,19 +43,19 @@ config:
         clientCert: false
         # config.default.backend.tls.verifyHost -- Backend TLS certificate verifyHost ('true', 'false')
         verifyHost: false
-        # config.default.backend.tls.version -- TLS Version
+        # config.default.backend.tls.version -- Backend TLS Version. Set the back-end SSL protocol version: (`Default`, `SSLv3`, `TLSv1.0`, `TLSv1.1`, `TLSv1.2`, `TLSv1.3`, `TLSv1.x`). Note: TLSv1 is a legacy value with the same meaning as TLSv1.0
         version: ""
-        # config.default.backend.tls.cipherSuite --
+        # config.default.backend.tls.cipherSuite -- Set the back-end SSL cipher list (up to TLS 1.2). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers"
         cipherSuite: ""
-        # config.default.backend.tls.cipherSuitev13 --
+        # config.default.backend.tls.cipherSuitev13 -- Set the back-end SSL cipher list (TLS 1.3). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers"
         cipherSuitev13: ""
     virtualHost:
       tlsCipher:
         # config.default.virtualHost.tlsCipher.enabled -- Virtual Host TLS enabled
         enabled: false
-        # config.default.virtualHost.tlsCipher.protocol -- Virtual Host TLS Protocol
+        # config.default.virtualHost.tlsCipher.protocol -- Virtual Host TLS Protocol. (`all`, `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`) Versions can be excluded with -<Version_Name>. 
         protocol: ""
-        # config.default.virtualHost.tlsCipher.cipherSuite -- Virtual Host TLS cipherSuite
+        # config.default.virtualHost.tlsCipher.cipherSuite -- Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA`
         cipherSuite: ""
 
   expert:
@@ -69,9 +69,9 @@ config:
   #  - name: WAF_CFG_EXAMPLE
   #    value: Example_Value
 
-  # config.tlsSecretName -- (string) Name of an existing secret containing the TLS key, certificate and CA for the Microgateway.
-  # Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.
-  # Needs (Backend Certs)
+  # config.tlsSecretName -- (string) Name of an existing secret containing the TLS Secrets for the Microgateway.
+  # Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.
+  # Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`. 
   tlsSecretName:
 
   # config.passphrase -- (string) Encryption passphrase used for the session.
@@ -84,8 +84,8 @@ config:
   existingSecret:
   # config.logLevel -- Log level (`info`, `trace`)
   logLevel: info
-  # config.redisService -- Redis service hostname
-  redisService: redis-master
+  # config.redisService -- List of Redis service hostname. If `redis.enabled true`, `redis-master` is set as hostname by default.
+  redisService: []
   IPHeader:
     # config.IPHeader.header -- HTTP header to extract the client IP address.
     header: X-Forwarded-For
@@ -256,9 +256,6 @@ affinity:
   #         matchLabels:
   #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
   #       topologyKey: kubernetes.io/hostname
-
-test:
-  enabled: false
 
 redis:
   # redis.enabled -- If true, the Redis chart will be installed. See [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) for further documentation and available parameters

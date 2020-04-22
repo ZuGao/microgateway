@@ -79,3 +79,30 @@ Get the secret name
   {{- printf "%s" (include "microgateway.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if global expert settings should be created
+*/}}
+{{- define "microgateway.globalExpertSettings" -}}
+{{- if or .Values.config.expert.apache .Values.config.expert.security_gate .Values.config.IPHeader.trustedProxies .Values.config.default.virtualHost.tlsCipher.enabled .Values.config.default.backend.tls.enabled -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if apache expert settings should be created
+*/}}
+{{- define "microgateway.apacheExpertSettings" -}}
+{{- if or .Values.config.expert.apache .Values.config.IPHeader.trustedProxies .Values.config.default.virtualHost.tlsCipher.enabled -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if securityGate expert settings should be created
+*/}}
+{{- define "microgateway.securityGateExpertSettings" -}}
+{{- if or .Values.config.expert.security_gate .Values.config.default.backend.tls.enabled -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
