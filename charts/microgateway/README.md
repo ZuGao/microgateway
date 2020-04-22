@@ -1,6 +1,8 @@
 Airlock microgateway
 ============
 
+Version: 0.3.7
+
 Web Application firewall (WAF) as a container to protect other containers.
 
 ## Adding the Repository
