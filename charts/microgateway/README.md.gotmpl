@@ -1,6 +1,6 @@
 Airlock {{ template "chart.header" . }}
 
-Version: {{ template "chart.version" . }}
+{{ template "chart.versionLine" . }}
 
 {{ template "chart.description" . }}
 
@@ -28,12 +28,49 @@ To uninstall the chart with the release name `airlock-waf`:
 helm uninstall airlock-waf
 ```
 
-## DSL Methodes
+## DSL Configuration
+With the Helm Chart you have three different possibilities to configure the DSL of the Microgateway. 
+Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
+
 ### Default DSL
 The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
+All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
+
+Example code fragment:
+Customization of the backend hostname.
+custom-values.yaml
+```
+config:
+  default:
+    backend:
+      hostname: custom-backend
+```
+
+### Custom DSL App
+If the default app settings are not sufficient, you can define a custom app as YAML with the `config.apps` parameter. 
+This setting overwrites the default app (mapping & backend), but the remaining settings of the DSL can still be configured with the default DSL method. 
+Example code fragment:
+Customization of the VirtualHost with Apache Expert Settings.
+custom-values.yaml
+```
+config:
+  expert:
+    apache: |
+      LogLevel debug
+  apps: | 
+    - virtual_host:
+        hostname: custom-hostname
+      backend:
+        hostname: backend-service
+      mappings:
+        - name: app
+          entry_path: /
+          backend_path: /app/
+```
 
 ### Custom DSL
-In case that the default config is not sufficient, create a custom config using `config.dsl.*`. All the configuration of the DSL can be used.
+In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
+Overwrites all config defaults of this chart. 
 
 ## Configuration
 

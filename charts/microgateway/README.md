@@ -1,6 +1,8 @@
 Airlock microgateway
 ============
 
+Current chart version is `0.3.7`
+
 Web Application firewall (WAF) as a container to protect other containers.
 
 ## Adding the Repository
@@ -27,12 +29,49 @@ To uninstall the chart with the release name `airlock-waf`:
 helm uninstall airlock-waf
 ```
 
-## DSL Methodes
+## DSL Configuration
+With the Helm Chart you have three different possibilities to configure the DSL of the Microgateway. 
+Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
+
 ### Default DSL
 The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
+All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
+
+Example code fragment:
+Customization of the backend hostname.
+custom-values.yaml
+```
+config:
+  default:
+    backend:
+      hostname: custom-backend
+```
+
+### Custom DSL App
+If the default app settings are not sufficient, you can define a custom app as YAML with the `config.apps` parameter. 
+This setting overwrites the default app (mapping & backend), but the remaining settings of the DSL can still be configured with the default DSL method. 
+Example code fragment:
+Customization of the VirtualHost with Apache Expert Settings.
+custom-values.yaml
+```
+config:
+  expert:
+    apache: |
+      LogLevel debug
+  apps: | 
+    - virtual_host:
+        hostname: custom-hostname
+      backend:
+        hostname: backend-service
+      mappings:
+        - name: app
+          entry_path: /
+          backend_path: /app/
+```
 
 ### Custom DSL
-In case that the default config is not sufficient, create a custom config using `config.dsl.*`. All the configuration of the DSL can be used.
+In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
+Overwrites all config defaults of this chart. 
 
 ## Configuration
 
@@ -46,13 +85,21 @@ In case that the default config is not sufficient, create a custom config using 
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
 | config.default.backend.protocol | string | `"http"` | Backend Protocol |
+| config.default.backend.tls.CipherSuite | string | `""` |  |
+| config.default.backend.tls.CipherSuiteTls13 | string | `""` |  |
+| config.default.backend.tls.ClientCert | bool | `false` | Backend TLS ClientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
+| config.default.backend.tls.ServerCA | bool | `false` | Backend TLS ServerCA ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
+| config.default.backend.tls.VerifyHost | bool | `false` | Backend TLS certificate VerifyHost ('true', 'false') |
+| config.default.backend.tls.Version | string | `""` | SSLVersion |
+| config.default.backend.tls.enabled | bool | `false` | Backend TLS enabled |
 | config.default.mapping.denyRules.enabled | bool | `true` | If deny rules should be enabled |
 | config.default.mapping.denyRules.level | string | `"standard"` | Deny rule level (`basic`, `standard`, `strict`) |
 | config.default.mapping.denyRules.logOnly | bool | `false` | Deny rule log only |
 | config.default.mapping.entryPath | string | `"/"` | The `entry_path` for this app |
 | config.default.mapping.operationalMode | string | `"production"` | Specifies the operational mode of this mapping (`production`, `integration`) |
 | config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. |
-| config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all defaults of this chart |
+| config.default.virtualHost | string | `nil` |  |
+| config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all config defaults of this chart |
 | config.env | list | `[]` | List of environment variables (YAML array) |
 | config.existingSecret | string | `nil` | An existing secret to be used, must contain the keys `license` and `passphrase` |
 | config.expert.apache | string | `nil` | Expert settings for Apache (multiline string) |
@@ -61,7 +108,7 @@ In case that the default config is not sufficient, create a custom config using 
 | config.logLevel | string | `"info"` | Log level (`info`, `trace`) |
 | config.passphrase | string | `nil` | Encryption passphrase used for the session. A random one is generated on each upgrade if not specified here or in `config.existingSecret` |
 | config.redisService | string | `"redis-master"` | Redis service hostname |
-| config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS key, certificate and CA for the Microgateway. Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used |
+| config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS key, certificate and CA for the Microgateway. Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used. Needs (Backend Certs) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |

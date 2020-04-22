@@ -17,9 +17,9 @@ data:
     {{- end }}
     log:
       level: {{ $config.logLevel }}
-  {{- if or $config.expert.apache $config.expert.security_gate $config.IPHeader.trustedProxies }}
+  {{- if or $config.expert.apache $config.expert.security_gate $config.IPHeader.trustedProxies $config.default.virtualHost.tlsCipher.enabled $config.default.backend.tls.enabled }}
     expert_settings:
-    {{- if or $config.expert.apache $config.IPHeader.trustedProxies }}
+    {{- if or $config.expert.apache $config.IPHeader.trustedProxies $config.default.virtualHost.tlsCipher.enabled}}
       apache: |
       {{- if $config.IPHeader.trustedProxies }}
         RemoteIPHeader {{ $config.IPHeader.header }}
@@ -27,13 +27,42 @@ data:
         RemoteIPInternalProxy {{ . }}
         {{- end }}
       {{- end }}
-        {{- with $config.expert.apache }}
-          {{- . | nindent 8 }}
-        {{- end }}
-    {{- end }}
-    {{- with $config.expert.security_gate }}
-      security_gate: |
+      {{- if $config.default.virtualHost.tlsCipher.protocol }}
+        SSLProtocol {{ $config.default.virtualHost.tlsCipher.protocol }}
+      {{- end }}
+      {{- if $config.default.virtualHost.tlsCipher.cipherSuite }}
+        SSLCipherSuite {{ $config.default.virtualHost.tlsCipher.cipherSuite }}
+      {{- end }}
+      {{- with $config.expert.apache }}
         {{- . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if or $config.expert.security_gate $config.default.backend.tls.enabled }}
+      security_gate: |
+      {{- if $config.default.backend.tls.enabled }}
+        {{- if $config.default.backend.tls.serverCa }}
+        BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
+        {{- end }}
+        {{- if $config.default.backend.tls.clientCert }}
+        BackendSSLClientCert /secret/tls/backend-client.crt
+        BackendSSLClientCertKey /secret/tls/backend-client.key
+        {{- end }}
+        {{- if $config.default.backend.tls.verifyHost }}
+        BackendSSLVerifyHost "true"
+        {{- end }}
+        {{- if $config.default.backend.tls.version }}
+        BackendSSLVersion {{ $config.default.backend.tls.version }}
+        {{- end }}
+        {{- if $config.default.backend.tls.cipherSuite }}
+        BackendSSLCipherSuite {{ $config.default.backend.tls.cipherSuite }}
+        {{- end }}
+        {{- if $config.default.backend.tls.cipherSuitev13 }}
+        BackendSSLCipherSuiteTls13 {{ $config.default.backend.tls.cipherSuitev13 }}
+        {{- end }}
+      {{- end }}
+      {{- with $config.expert.security_gate }}
+        {{- . | nindent 8 }}
+      {{- end }}
     {{- end }}
   {{- end }}
 

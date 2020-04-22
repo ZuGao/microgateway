@@ -34,6 +34,30 @@ config:
       port: 8080
       # config.default.backend.protocol -- Backend Protocol
       protocol: http
+      tls:
+        # config.default.backend.tls.enabled -- Backend TLS enabled
+        enabled: false
+        # config.default.backend.tls.serverCa -- Backend TLS serverCa ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
+        serverCa: false
+        # config.default.backend.tls.clientCert -- Backend TLS clientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
+        clientCert: false
+        # config.default.backend.tls.verifyHost -- Backend TLS certificate verifyHost ('true', 'false')
+        verifyHost: false
+        # config.default.backend.tls.version -- TLS Version
+        version: ""
+        # config.default.backend.tls.cipherSuite --
+        cipherSuite: ""
+        # config.default.backend.tls.cipherSuitev13 --
+        cipherSuitev13: "" 
+    virtualHost:
+      tlsCipher: 
+        # config.default.virtualHost.tlsCipher.enabled -- Virtual Host TLS enabled
+        enabled: false
+        # config.default.virtualHost.tlsCipher.protocol -- Virtual Host TLS Protocol
+        protocol: ""
+        # config.default.virtualHost.tlsCipher.cipherSuite -- Virtual Host TLS cipherSuite
+        cipherSuite: ""
+
   expert:
     # config.expert.apache -- (string) Expert settings for Apache (multiline string)
     apache:
@@ -46,7 +70,8 @@ config:
   #    value: Example_Value
 
   # config.tlsSecretName -- (string) Name of an existing secret containing the TLS key, certificate and CA for the Microgateway.
-  # Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used
+  # Needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.
+  # Needs (Backend Certs)
   tlsSecretName:
 
   # config.passphrase -- (string) Encryption passphrase used for the session.
@@ -70,7 +95,7 @@ config:
   # config.apps -- Custom apps definition (YAML array). Overwrites default apps of this chart
   apps: []
 
-  # config.dsl -- Custom DSL to load (YAML). Overwrites all defaults of this chart
+  # config.dsl -- Custom DSL to load (YAML). Overwrites all config defaults of this chart
   dsl: {}
 
 # commonLabels -- Labels to apply to all resources
@@ -196,13 +221,13 @@ route:
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
 # resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "4048Mi"
+    cpu: "4"
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -231,6 +256,9 @@ affinity:
   #         matchLabels:
   #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
   #       topologyKey: kubernetes.io/hostname
+
+test:
+  enabled: false
 
 redis:
   # redis.enabled -- If true, the Redis chart will be installed. See [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) for further documentation and available parameters

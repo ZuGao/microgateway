@@ -1,0 +1,6 @@
+/secret/tls/frontend-client-selection-ca.crt (für VH "CAs for client certificate selection", wenn Client Cert req.) \-> Zukunftsmusik (falls wir das jemals bauen)
+/secret/tls/frontend-client-validation-ca.crt (für VH "CAs for chain validation and OCSP server validation ", wenn Client Cert req.) \-> Zukunftsmusik (falls wir das jemals bauen)
+/secret/tls/frontend-client.crl (für VH "CRL", wenn Client Cert req.) \-> Zukunftsmusik (falls wir das jemals bauen)
+/secret/tls/backend-client.crt (für Verbindung zum Back-end)
+/secret/tls/backend-client.key (für Verbindung zum Back-end)
+/secret/tls/backend-server-validation-ca.crt (CA für die Verifikation des Server Zertifikats des Back-ends)
