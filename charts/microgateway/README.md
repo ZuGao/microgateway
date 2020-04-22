@@ -1,11 +1,7 @@
 Airlock microgateway
 ============
 
-<<<<<<< HEAD
 Current chart version is `0.3.7`
-=======
-Version: 0.3.7
->>>>>>> 9127ac816e1a0c271e6fb49915a5551db05b5ba8
 
 Web Application firewall (WAF) as a container to protect other containers.
 
@@ -89,20 +85,22 @@ Overwrites all config defaults of this chart.
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
 | config.default.backend.protocol | string | `"http"` | Backend Protocol |
-| config.default.backend.tls.CipherSuite | string | `""` |  |
-| config.default.backend.tls.CipherSuiteTls13 | string | `""` |  |
-| config.default.backend.tls.ClientCert | bool | `false` | Backend TLS ClientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
-| config.default.backend.tls.ServerCA | bool | `false` | Backend TLS ServerCA ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
-| config.default.backend.tls.VerifyHost | bool | `false` | Backend TLS certificate VerifyHost ('true', 'false') |
-| config.default.backend.tls.Version | string | `""` | SSLVersion |
+| config.default.backend.tls.cipherSuite | string | `""` |  |
+| config.default.backend.tls.cipherSuitev13 | string | `""` |  |
+| config.default.backend.tls.clientCert | bool | `false` | Backend TLS clientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
 | config.default.backend.tls.enabled | bool | `false` | Backend TLS enabled |
+| config.default.backend.tls.serverCa | bool | `false` | Backend TLS serverCa ('true', 'false'). Uses the Certificate from 'config.tlsSecretName' |
+| config.default.backend.tls.verifyHost | bool | `false` | Backend TLS certificate verifyHost ('true', 'false') |
+| config.default.backend.tls.version | string | `""` | TLS Version |
 | config.default.mapping.denyRules.enabled | bool | `true` | If deny rules should be enabled |
 | config.default.mapping.denyRules.level | string | `"standard"` | Deny rule level (`basic`, `standard`, `strict`) |
 | config.default.mapping.denyRules.logOnly | bool | `false` | Deny rule log only |
 | config.default.mapping.entryPath | string | `"/"` | The `entry_path` for this app |
 | config.default.mapping.operationalMode | string | `"production"` | Specifies the operational mode of this mapping (`production`, `integration`) |
 | config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. |
-| config.default.virtualHost | string | `nil` |  |
+| config.default.virtualHost.tlsCipher.cipherSuite | string | `""` | Virtual Host TLS cipherSuite |
+| config.default.virtualHost.tlsCipher.enabled | bool | `false` | Virtual Host TLS enabled |
+| config.default.virtualHost.tlsCipher.protocol | string | `""` | Virtual Host TLS Protocol |
 | config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all config defaults of this chart |
 | config.env | list | `[]` | List of environment variables (YAML array) |
 | config.existingSecret | string | `nil` | An existing secret to be used, must contain the keys `license` and `passphrase` |
@@ -145,7 +143,7 @@ Overwrites all config defaults of this chart.
 | redis.slave.command | string | `"redis-server"` |  |
 | redis.usePassword | bool | `false` |  |
 | replicaCount | int | `1` | Desired number of Microgateway pods |
-| resources | object | `{}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway |
+| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway |
 | route.annotations | object | `{}` | Annotations to set on the route |
 | route.enabled | bool | `false` | If a route should be created |
 | route.hosts | list | `["chart-example.local"]` |  List of host names |
@@ -164,6 +162,7 @@ Overwrites all config defaults of this chart.
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| test.enabled | bool | `false` |  |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) (YAML array) |
 
 ## Chart dependencies
