@@ -48,9 +48,9 @@ config:
         # config.default.backend.tls.cipherSuite --
         cipherSuite: ""
         # config.default.backend.tls.cipherSuitev13 --
-        cipherSuitev13: "" 
+        cipherSuitev13: ""
     virtualHost:
-      tlsCipher: 
+      tlsCipher:
         # config.default.virtualHost.tlsCipher.enabled -- Virtual Host TLS enabled
         enabled: false
         # config.default.virtualHost.tlsCipher.protocol -- Virtual Host TLS Protocol
