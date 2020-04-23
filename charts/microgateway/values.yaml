@@ -35,8 +35,6 @@ config:
       # config.default.backend.protocol -- Backend Protocol
       protocol: http
       tls:
-        # config.default.backend.tls.enabled -- Backend TLS enabled
-        enabled: false
         # config.default.backend.tls.serverCa -- Backend TLS serverCa ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
         serverCa: false
         # config.default.backend.tls.clientCert -- Backend TLS clientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
@@ -50,12 +48,10 @@ config:
         # config.default.backend.tls.cipherSuitev13 -- Set the back-end SSL cipher list (TLS 1.3). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers"
         cipherSuitev13: ""
     virtualHost:
-      tlsCipher:
-        # config.default.virtualHost.tlsCipher.enabled -- Virtual Host TLS enabled
-        enabled: false
-        # config.default.virtualHost.tlsCipher.protocol -- Virtual Host TLS Protocol. (`all`, `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`) Versions can be excluded with -<Version_Name>.
+      tls:
+        # config.default.virtualHost.tls.protocol -- Virtual Host TLS Protocol. (`all`, `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`) Versions can be excluded with -<Version_Name>.
         protocol: ""
-        # config.default.virtualHost.tlsCipher.cipherSuite -- Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA`
+        # config.default.virtualHost.tls.cipherSuite -- Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA`
         cipherSuite: ""
 
   expert:
