@@ -81,15 +81,6 @@ Get the secret name
 {{- end -}}
 
 {{/*
-Return true if global expert settings should be created
-*/}}
-{{- define "microgateway.globalExpertSettings" -}}
-{{- if or .Values.config.expert.apache .Values.config.expert.security_gate .Values.config.IPHeader.trustedProxies .Values.config.default.virtualHost.tlsCipher.enabled .Values.config.default.backend.tls.enabled -}}
-  {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return true if apache expert settings should be created
 */}}
 {{- define "microgateway.apacheExpertSettings" -}}
