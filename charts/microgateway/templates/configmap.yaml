@@ -11,15 +11,21 @@ data:
     license_file: /secret/config/license
     session:
       encryption_passphrase_file: /secret/config/passphrase
-    {{- if .Values.redis.enabled }}
+    {{- if or .Values.redis.enabled $config.redisService }}
+      {{- if $config.redisService }}
       redis_hosts:
-        - {{ $config.redisService }}
+        {{- range $config.redisService }} 
+        - {{ . }}
+        {{- end }}
+      {{- else }}
+      redis_hosts: redis-master
+      {{- end }}
     {{- end }}
     log:
       level: {{ $config.logLevel }}
-  {{- if or $config.expert.apache $config.expert.security_gate $config.IPHeader.trustedProxies }}
+  {{- if or (include "microgateway.apacheExpertSettings" .) (include "microgateway.securityGateExpertSettings" .) }}
     expert_settings:
-    {{- if or $config.expert.apache $config.IPHeader.trustedProxies }}
+    {{- if (include "microgateway.apacheExpertSettings" .) }}
       apache: |
       {{- if $config.IPHeader.trustedProxies }}
         RemoteIPHeader {{ $config.IPHeader.header }}
@@ -27,13 +33,42 @@ data:
         RemoteIPInternalProxy {{ . }}
         {{- end }}
       {{- end }}
-        {{- with $config.expert.apache }}
-          {{- . | nindent 8 }}
-        {{- end }}
-    {{- end }}
-    {{- with $config.expert.security_gate }}
-      security_gate: |
+      {{- if $config.default.virtualHost.tlsCipher.protocol }}
+        SSLProtocol {{ $config.default.virtualHost.tlsCipher.protocol }}
+      {{- end }}
+      {{- if $config.default.virtualHost.tlsCipher.cipherSuite }}
+        SSLCipherSuite {{ $config.default.virtualHost.tlsCipher.cipherSuite }}
+      {{- end }}
+      {{- with $config.expert.apache }}
         {{- . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if (include "microgateway.securityGateExpertSettings" .) }}
+      security_gate: |
+      {{- if $config.default.backend.tls.enabled }}
+        {{- if $config.default.backend.tls.serverCa }}
+        BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
+        {{- end }}
+        {{- if $config.default.backend.tls.clientCert }}
+        BackendSSLClientCert /secret/tls/backend-client.crt
+        BackendSSLClientCertKey /secret/tls/backend-client.key
+        {{- end }}
+        {{- if $config.default.backend.tls.verifyHost }}
+        BackendSSLVerifyHost "true"
+        {{- end }}
+        {{- if $config.default.backend.tls.version }}
+        BackendSSLVersion {{ $config.default.backend.tls.version }}
+        {{- end }}
+        {{- if $config.default.backend.tls.cipherSuite }}
+        BackendSSLCipherSuite {{ $config.default.backend.tls.cipherSuite }}
+        {{- end }}
+        {{- if $config.default.backend.tls.cipherSuitev13 }}
+        BackendSSLCipherSuiteTls13 {{ $config.default.backend.tls.cipherSuitev13 }}
+        {{- end }}
+      {{- end }}
+      {{- with $config.expert.security_gate }}
+        {{- . | nindent 8 }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
