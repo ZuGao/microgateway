@@ -237,11 +237,11 @@ Bla
 ## Deny Rule Handling Braucht es das?
 
 ## Secrets
-Several different Secrets are required to configure the microgateway properly. 
-Some of these secrets can be generated during the installation of the chart, others must be created in advance and then referenced in the microgateway chart. 
-The following examples show how to create a secret and how to use it with the microgateway. 
+Several different Secrets are required to configure the microgateway properly.  
+Some of these secrets can be generated during the installation of the chart, others must be created in advance and then referenced in the microgateway chart.   
+The following examples show how to create a secret and how to use it with the microgateway.  
 
-### config.existingSecret
+### existingSecret
 This secret contains the license and the passphrase (for encryption). 
 For example, this secret can be created as follows:
 ```
@@ -265,12 +265,12 @@ imagePullSecrets:
     - name: "dockersecret"
 ```
 
-### config.tlsSecretName 
-The TLS certificates that are used by the Microgateway can be stored in a secret, so that only the secret name needs to be specified during deployment.
-Microgateway certificates include both Virtual Host TLS certificates and the TLS certificates for the backend if the backend is to be connected via TLS.
-Depending on the desired TLS configuration, other certificates are required in Secret. 
-Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.
-Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`.
+### tlsSecretName 
+The TLS certificates that are used by the Microgateway can be stored in a secret, so that only the secret name needs to be specified during deployment.  
+Microgateway certificates include both Virtual Host TLS certificates and the TLS certificates for the backend if the backend is to be connected via TLS.  
+Depending on the desired TLS configuration, other certificates are required in Secret.   
+Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.  
+Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`.  
 
 For example, this secret can be created as follows:
 ```
@@ -283,18 +283,18 @@ config:
 ```
 
 # Examples
-Here are some examples of how the microgateway could be installed. 
-Depending on the requirements and knowledge level, one or the other example may be more suitable for your environment.
+Here are some examples of how the microgateway could be installed.   
+Depending on the requirements and knowledge level, one or the other example may be more suitable for your environment.  
 
 ## <a name="dsl-configuration-examples"></a>DSL Configuration Examples
-The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the helm chart. 
-In the following chapters, various examples of these configuration options are given to help you better understand the DLS mechanism in order to use it as efficiently as possible.
-Depending on the requirements of the Microgateway configuration, a different DSL must be created. 
+The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the helm chart.   
+In the following chapters, various examples of these configuration options are given to help you better understand the DLS mechanism in order to use it as efficiently as possible.  
+Depending on the requirements of the Microgateway configuration, a different DSL must be created.   
 
 ### Simple setup example 
-The Simple Setup assumes that it has a virtual host, mapping and backend each. 
-For the Simple Setup all settings `config.*` are available.
-Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the helm chart.
+The Simple Setup assumes that it has a virtual host, mapping and backend each.   
+For the Simple Setup all settings `config.*` are available.  
+Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the helm chart.  
 
 simple-values.yaml
 ```
@@ -310,11 +310,11 @@ config:
 ```
 
 ### Advanced setup example
-The Advanced setup should be used if the settings of the Simple Setup are no longer sufficient.
-Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the config.default.*.
-Please note that a valid DSL app must be specified and the values config.default.* are no longer used. 
+The Advanced setup should be used if the settings of the Simple Setup are no longer sufficient.  
+Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the config.default.*.  
+Please note that a valid DSL app must be specified and the values config.default.* are no longer used.   
 
-The following two examples show a possible use case where you could choose the Advanced Setup. 
+The following two examples show a possible use case where you could choose the Advanced Setup.  
 
 Multiple Mappings:
 ```
@@ -347,19 +347,19 @@ apps:
 ```
 
 ### Expert setup example
-In the expert setup you must dispense of all config.* settings of the helm chart, with the exception of the config.dsl setting.
-This means that if you have DSL requirements that cannot be covered by the first two setups, you can specify your own DSL. 
+In the expert setup you must dispense of all config.* settings of the helm chart, with the exception of the config.dsl setting.  
+This means that if you have DSL requirements that cannot be covered by the first two setups, you can specify your own DSL.   
 
 ## External connectivity
-This section describes how the external connectivity can be configured. 
-There are two different scenarios if you are on Kubernetes or if you want to install on Openshift. 
-On Kubernetes an Ingress Controller is used and on Openshift a Route object. 
+This section describes how the external connectivity can be configured.   
+There are two different scenarios if you are on Kubernetes or if you want to install on Openshift.   
+On Kubernetes an Ingress Controller is used and on Openshift a Route object.   
 
 ### Kubernetes Ingress
-In the Kubernetes environments an Ingress Controller is required to make the Microgateway accessible from the Internet.
-In our examples we will use the nginx-ingress-controller. However, this is not installed directly with the helmet chart. 
-The helm chart only offers the possibility to create the required configuration for an existing Ingress Controller. 
-If no ingress controller is available in an environment, it can be installed with helm. 
+In the Kubernetes environments an Ingress Controller is required to make the Microgateway accessible from the Internet.  
+In our examples we will use the nginx-ingress-controller. However, this is not installed directly with the helmet chart.   
+The helm chart only offers the possibility to create the required configuration for an existing Ingress Controller.   
+If no ingress controller is available in an environment, it can be installed with helm.   
 
 [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
 ```
@@ -368,7 +368,7 @@ helm install nginx stable/nginx-ingress
 ```
 
 #### Without TLS
-The following configuration example shows how the Ingress can be configured without TLS.
+The following configuration example shows how the Ingress can be configured without TLS.  
 
 ```
 ingress:
@@ -381,9 +381,9 @@ ingress:
 ```
 
 #### TLS Configuration
-Ein Ingress kann mit einem Secret, welches die TLS Zertifikate enthält geschützt werden.
-Currently the Ingress only supports a single TLS port, 443, and assumes TLS termination.
-If the TLS configuration section in an Ingress specifies different hosts, they are bundled on the same port according to the SNI-TLS extension.
+An Ingress can be protected with a Secret, which contains the TLS certificates.  
+Currently the Ingress only supports a single TLS port, 443, and assumes TLS termination.  
+If the TLS configuration section in an Ingress specifies different hosts, they are bundled on the same port according to the SNI-TLS extension.  
 
 The following configuration example shows how the Ingress can be configured with TLS.
 ```
@@ -400,8 +400,8 @@ ingress:
 ```
 
 ### Openshift Route
-In Openshift wird eine Route benötigt, um den Microgateway vom Internet zu erreichen.
-Für dessen Konfiguration muss ein Route Objekt erstellt werden. Das erstellen eines solchen Objektes wird vom microgateway helm chart übernommen.
+In Openshift a route is needed to reach the Microgateway from the Internet.
+A route object must be created for its configuration. The creation of such an object is handled by the microgateway helmet chart.  
 
 #### Without TLS
 This example shows how to configure a route object without TLS using the helm chart.
@@ -417,16 +417,16 @@ route:
 ```
 
 #### TLS Configuration
-There are three different TLS configuration options for the openshift route. These are edge, reencrypt and passthrough.
-Below is a description of how these options can be configured using the microgateway chart.
+There are three different TLS configuration options for the openshift route. These are edge, reencrypt and passthrough.  
+Below is a description of how these options can be configured using the microgateway chart.  
 
 Evtl. nur eine Möglichkeit. 
-There are two different options for specifying TLS certificates in the helm chart. 
-Either you create a secret (config.tlsSecretName) containing the required certificates or you provide the certificates in a custom-values.yaml file during deployment. 
+There are two different options for specifying TLS certificates in the helm chart.   
+Either you create a secret (config.tlsSecretName) containing the required certificates or you provide the certificates in a custom-values.yaml file during deployment.   
 
 ##### Edge
-With the edge termination TLS is terminated on the router. 
-The TLS certificates are served by the router and must therefore be configured on the router. 
+With the edge termination TLS is terminated on the router.   
+The TLS certificates are served by the router and must therefore be configured on the router.   
 
 ```
 route:
@@ -455,9 +455,9 @@ route:
 ```
 
 ##### Reencrypt
-Reencrypt is similar to edge termination, because TLS termination takes place on the router.
-However, with reencrypt the connection is encrypted again before the request is sent to the Microgateway service. 
-This means that the entire path of the connection is encrypted, including the internal network. 
+Reencrypt is similar to edge termination, because TLS termination takes place on the router.  
+However, with reencrypt the connection is encrypted again before the request is sent to the Microgateway service.   
+This means that the entire path of the connection is encrypted, including the internal network.   
 
 ```
 route:
@@ -493,8 +493,8 @@ route:
 ```
 
 ##### Passthrough
-When Passthrough is configured, the encrypted traffic is sent directly to the Microgateway without being terminated on the route. 
-This means that no certificate needs to be configured on the route and termination takes place only on the Microgateway.
+When Passthrough is configured, the encrypted traffic is sent directly to the Microgateway without being terminated on the route.   
+This means that no certificate needs to be configured on the route and termination takes place only on the Microgateway.  
 
 ```
 route:
@@ -508,9 +508,9 @@ route:
 ```
 
 ## Environment Variables
-With the helm chart environment variables can be set. 
-These can then be used in the DSL configuration. 
-Below is an example of how to set environment variables and then use them in the DSL. 
+With the helm chart environment variables can be set.   
+These can then be used in the DSL configuration.   
+Below is an example of how to set environment variables and then use them in the DSL.   
 
 env-varibles-values.yaml
 ```
@@ -533,34 +533,34 @@ config:
 ```
 
 ## Probes
-In Kubernetes and Openshift probes are used to determine if a pod is ready to process requests or not.
+In Kubernetes and Openshift probes are used to determine if a pod is ready to process requests or not.  
 
 ### Liveness Probe
-The liveness Probe is used to find out when to restart a Pod. 
-If a liveness Probe fails, the Pod will restart. 
+The liveness Probe is used to find out when to restart a Pod.   
+If a liveness Probe fails, the Pod will restart.   
 
-The helm chart has already predefined a liveness probe. 
-If this does not work, it can be adjusted as follows. 
+The helm chart has already predefined a liveness probe.   
+If this does not work, it can be adjusted as follows.   
 
 ```
 livenessProbe:
   initialDelaySeconds: 120
 ```
 
-The liveness Probe can be disabled with `livenessProbe.enabled=false`
-Then the default of the environment on which the Microgateway is deployed is applied. 
+The liveness Probe can be disabled with `livenessProbe.enabled=false`  
+Then the default of the environment on which the Microgateway is deployed is applied.   
 
 ### Readiness Probe
-The readiness Probe is used to set the status of a pod to Ready. This means that the pod is now ready to process requests.
-If a readiness Probe fails, only the Ready status of the Pod is removed. 
+The readiness Probe is used to set the status of a pod to Ready. This means that the pod is now ready to process requests.  
+If a readiness Probe fails, only the Ready status of the Pod is removed.   
 
-The helm chart has already predefined a readiness probe. 
-If this does not work, it can be adjusted as follows. 
+The helm chart has already predefined a readiness probe.   
+If this does not work, it can be adjusted as follows.   
 
 ```
 readinessProbe:
   initialDelaySeconds: 90
 ```
 
-The readiness Probe can be disabled with `readinessProbe.enabled=false`
-Then the default of the environment on which the Microgateway is deployed is applied. 
+The readiness Probe can be disabled with `readinessProbe.enabled=false`  
+Then the default of the environment on which the Microgateway is deployed is applied.   
