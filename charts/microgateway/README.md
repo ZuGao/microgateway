@@ -1,9 +1,15 @@
 Airlock microgateway
 ============
 
-Current chart version is `0.3.8`
+Current chart version is `0.3.9`
 
 Web Application firewall (WAF) as a container to protect other containers.
+
+# microgateway with helm
+This chapter briefly describes how to install the Airlock microgateway with helm. 
+A preconfigured microgateway pod is installed only by executing the following commands.
+However, it cannot be used rightaway, as it is not licensed and has not yet been adapted to your environment. 
+More details about the installation of the microgateway helm chart can be found in chapter [Helm basics](#helm-basics).
 
 ## Adding the Repository
 
@@ -15,21 +21,21 @@ helm repo add airlock https://libuweber.github.io/microgateway/
 
 ## Installing the Chart
 
-To install the chart with the release name `airlock-waf`:
+To install the chart with the release name `waf`:
 
 ```console
-helm upgrade -i airlock-waf airlock/microgateway
+helm upgrade -i waf airlock/microgateway
 ```
 
 ## Uninstalling the Chart
 
-To uninstall the chart with the release name `airlock-waf`:
+To uninstall the chart with the release name `waf`:
 
 ```console
-helm uninstall airlock-waf
+helm uninstall waf
 ```
 
-## DSL Configuration
+## <a name="dsl-configuration"></a> DSL Configuration
 With the Helm Chart you have three different possibilities to configure the DSL of the Microgateway. 
 Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
 
@@ -179,3 +185,160 @@ helm upgrade -i airlock-waf airlock/microgateway --set redis.enabled=true
 To see all possible settings for this dependency please go to the following URL: [Helm Hub bitnami/redis](https://hub.helm.sh/charts/bitnami/redis)
 
 :warning: **Adjustments of the default settings**: The Redis was tested only with this default settings. With all changes to these settings it cannot be assured that the Redis will work as expected.
+
+# <a name="helm-basics"></a>Helm basics
+In this chapter the helmet basics are described.
+The helm charts already offers default values, so that as little as possible needs to be adjusted to ensure a secure installation of the Microgateway. 
+Depending on the environment and configuration, different values must be adjusted. There are various possibilities for that. 
+
+* --values / -f 
+  The -f parameter can be used to specify a custom-values.yaml file that overwrites the default values of the chart during deployment.
+  Such a file could look like the following. It is important that the indentation of the key value pairs is correct.
+  custom-values.yaml
+  ```
+  config:
+    default:
+      backend:
+        hostname: backend-hostname
+    existingSecret: "microgatewaysecrets"
+  imagePullSecrets:
+    - name: "dockersecret"
+  ingress:
+    enabled: true
+    hosts:
+        - virtinc.com
+  ```
+
+* --set 
+  With the --set parameter a single value can be overwritten directly in the command line.
+  The following command would adjust the Microgateway LogLevel during deployment. 
+  ```
+  --set config.logLevel=trace
+  ```
+
+* --set-file
+  With the --set-file parameter a value can be overwritten with a file. 
+  Unlike the -f parameter, no indentation is required in the file. 
+  As an example you can set the Apache Expert Settings from a file like this. 
+  ```
+  --set-file config.expert.apache=apache-expert.yaml
+  ```
+  apache-expert.yaml
+  ```
+  Timeout 300
+  LogLevel warn
+  RewriteEngine On
+  ```
+
+# Security
+Bla
+## Hardening
+Bla
+## Deny Rule Handling
+
+## Secrets
+Several different Secrets are required to configure the microgateway properly. 
+Some of these secrets can be generated during the installation of the chart, others must be created in advance and then referenced in the microgateway chart. 
+The following examples show how to create a secret and how to use it with the microgateway. 
+
+### config.existingSecret
+This secret contains the license and the passphrase (for encryption). 
+For example, this secret can be created as follows:
+```
+kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt
+```
+This secret can then be used with the following custom-values.yaml configuration:
+```
+config:
+  existingSecret: "microgatewaysecrets"
+```
+
+### imagePullSecrets
+To download the Microgateway image from a private docker repository, an imagePullSecret is required.
+For example, this secret can be created as follows:
+```
+kubectl create secret docker-registry dockersecret --docker-username=<Username> --docker-password=<Access_Token>
+```
+This secret can then be used with the following custom-values.yaml configuration:
+```
+imagePullSecrets: 
+    - name: "dockersecret"
+```
+
+### config.tlsSecretName (Muss ich zuerst selber durchspielen. )
+
+## TLS Configuration
+This section describes how TLS can be configured. 
+There are two different scenarios if you are on Kubernetes or if you want to install on Openshift. 
+On Kubernetes an Ingress Controller is used and on Openshift a Route object. 
+
+### Ingress
+Verschiedene Scenarien
+
+
+### Route
+Verschiendene Szenarien 
+
+# Examples
+Here are some examples of how the microgateway could be installed. 
+Depending on the requirements and knowledge level, one or the other example may be more suitable for your environment.
+
+## <a name="dsl-configuration-examples"></a>DSL Configuration Examples
+The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the helm chart. 
+In the following chapters, various examples of these configuration options are given to help you better understand the DLS mechanism in order to use it as efficiently as possible.
+Depending on the requirements of the Microgateway configuration, a different DSL must be created. 
+
+### Simple example 
+The Simple Setup assumes that it has a virtual host, mapping and backend each. 
+For the Simple Setup all settings `config.*` are available.
+Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the helm chart.
+
+simple-values.yaml
+```
+config:
+  default:
+    mapping:
+      operationalMode: integration
+      denyRules:
+        level: strict
+    backend:
+      hostname: backend-hostname
+  logLevel: trace
+```
+
+### Advanced example
+The Advanced setup should be used if the settings of the Simple Setup are no longer sufficient.
+Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the config.default.*.
+Please note that a valid DSL app must be specified and the values config.default.* are no longer used. 
+
+The following two examples show a possible use case where you could choose the Advanced Setup. 
+
+Multiple Mappings:
+```
+apps:
+  - backend:
+      hostname: backend-hostname
+      protocol: https
+    mappings:
+      - name: root
+      - name: example
+        entry_path: /example/
+        operational_mode: integration
+```
+
+Deny Rule exceptions:
+```
+
+```
+
+### Expert example
+
+## External connectivity
+
+### Kubernetes Ingress
+
+### Openshift Route
+
+## Environment Variables
+
+## Probes
