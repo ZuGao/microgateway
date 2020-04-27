@@ -5,10 +5,13 @@ Current chart version is `0.3.9`
 
 Web Application firewall (WAF) as a container to protect other containers.
 
+# Prerequisites
+* Access to the microgateway image
+* Valid microgateway license
+
 # microgateway with helm
 This chapter briefly describes how to install the Airlock microgateway with helm. 
 A preconfigured microgateway pod is installed only by executing the following commands.
-However, it cannot be used rightaway, as it is not licensed and has not yet been adapted to your environment. 
 More details about the installation of the microgateway helm chart can be found in chapter [Helm basics](#helm-basics).
 
 ## Adding the Repository
@@ -209,32 +212,11 @@ Depending on the environment and configuration, different values must be adjuste
         - virtinc.com
   ```
 
-* --set   
-  With the --set parameter a single value can be overwritten directly in the command line.
-  The following command would adjust the Microgateway LogLevel during deployment. 
-  ```
-  --set config.logLevel=trace
-  ```
+# Security (TBD)
 
-* --set-file  
-  With the --set-file parameter a value can be overwritten with a file. 
-  Unlike the -f parameter, no indentation is required in the file. 
-  As an example you can set the Apache Expert Settings from a file like this. 
-  ```
-  --set-file config.expert.apache=apache-expert.yaml
-  ```
-  apache-expert.yaml
-  ```
-  Timeout 300
-  LogLevel warn
-  RewriteEngine On
-  ```
+## Hardening (TBD)
 
-# Security 
-Bla
-## Hardening ??
-Bla
-## Deny Rule Handling Braucht es das?
+## Deny Rule Handling (TBD)
 
 ## Secrets
 Several different Secrets are required to configure the microgateway properly.  
@@ -311,7 +293,7 @@ config:
 
 ### Advanced setup example
 The Advanced setup should be used if the settings of the Simple Setup are no longer sufficient.  
-Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the config.default.*.   
+Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the `config.default.*`.   
 Please note that a valid DSL app must be specified and the values config.default.* are no longer used.   
 
 The following two examples show a possible use case where you could choose the Advanced Setup.  
