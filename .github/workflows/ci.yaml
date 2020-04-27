@@ -22,6 +22,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Install helm-docs
+        run: .github/helm-docs-install.sh
+        env:
+          HELM_DOCS_VERSION: "0.12.0"
       - name: Run helm-docs
         id: validatedocs
         run: .github/helm-docs-verify.sh
