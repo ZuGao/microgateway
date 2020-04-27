@@ -10,8 +10,13 @@ git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           
 ./helm-docs
 
+READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
+
 git checkout  ${BRANCH_NAME}
-git add charts/microgateway/README.md
+for README_CHANGED in ${READMES_CHANGED}; do
+  git add ${README_CHANGED}
+done 
+
 git commit -m "Automated README generation"
 echo "Push to ${BRANCH_NAME}"
 git push "https://$GITHUB_ACTOR:$CR_TOKEN@github.com/libuweber/microgateway.git" ${BRANCH_NAME}
